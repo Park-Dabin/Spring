@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="ac.kr.smu.mapper.FileMapper">
+    <insert id="save">
+        INSERT INTO file(name,uuid,upload_path,post_id)
+        VALUES(#{name},#{uuid},#{uploadPath},#{postId})
+    </insert>
+    <select id="findById" resultType="FileVO">
+        SELECT * FROM file WHERE id = #{id}
+    </select>
+    <delete id="deleteByPostId">
+        DELETE FROM file WHERE post_id = #{postId}
+    </delete>
+    <select id="findByPostId" resultType="FileVO">
+        SELECT * FROM file WHERE post_id = #{postId}
+    </select>
+</mapper>

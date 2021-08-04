@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="ac.kr.smu.mapper.PostMapper">
+
+    <resultMap id="post" type="PostVO">
+        <id property="id" column="id" />
+        <id property="title" column="title" />
+        <id property="content" column="content" />
+        <id property="created_date" column="created_date" />
+        <association property="user"  javaType="UserVO" >
+            <result property="id"  column="user_id" />
+            <result property="email"  column="email" />
+            <result property="name"  column="name" />
+        </association>
+        <collection property="fileList" column="id" select="findFileListById" ofType="FileVO"/>
+    </resultMap>
+
+    <insert id="save" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO post(title,content,created_date,user_id)
+        VALUES(#{title},#{content},#{created_date},#{user.id})
+    </insert>
+    <select id="findAll" resultType="PostVO" resultMap="post">
+        SELECT * from post as p JOIN user AS u on p.user_id = u.id
+    </select>
+    <select id="findById" resultType="PostVO" resultMap="post">
+        SELECT * FROM post as p JOIN user AS u ON p.user_id = u.id WHERE p.id=#{id};
+    </select>
+    <select id="update" resultType="PostVO">
+        UPDATE post SET title=#{title}, content=#{content} WHERE id=#{id};
+        SELECT * FROM post as p JOIN user AS u ON p.user_id = u.id WHERE p.id=#{id};
+    </select>
+    <select id="findFileListById" resultType="FileVO">
+        SELECT * FROM file WHERE post_id = #{id}
+    </select>
+    <delete id="delete">
+        DELETE FROM post WHERE id=#{id}
+    </delete>
+</mapper>
